@@ -1,43 +1,47 @@
-The ``100-matrix_mul`` module
-===============================
+#!/usr/bin/python3
+"""100-matrix_mul module.
 
-Using ``matrix_mul``
-----------------------
+Defines a function that multiplies two matrices.
+"""
 
-Import the function:
 
-    >>> matrix_mul = __import__('100-matrix_mul').matrix_mul
+def validate_matrix(m, name):
+    """Validate that m is a proper rectangular matrix of numbers."""
+    if not isinstance(m, list):
+        raise TypeError("{} must be a list".format(name))
 
-Basic square matrix multiplication:
+    if not all(isinstance(row, list) for row in m):
+        raise TypeError("{} must be a list of lists".format(name))
 
-    >>> matrix_mul([[1, 2], [3, 4]], [[1, 2], [3, 4]])
-    [[7, 10], [15, 22]]
+    if len(m) == 0 or all(len(row) == 0 for row in m):
+        raise ValueError("{} can't be empty".format(name))
 
-Non-square compatible matrices:
+    if not all(isinstance(n, (int, float))
+               for row in m for n in row):
+        raise TypeError(
+            "{} should contain only integers or floats".format(name))
 
-    >>> matrix_mul([[1, 2]], [[3, 4], [5, 6]])
-    [[13, 16]]
+    if len(set(len(row) for row in m)) > 1:
+        raise TypeError(
+            "each row of {} must be of the same size".format(name))
 
-m_a is not a list:
 
-    >>> matrix_mul(42, [[1, 2]])
-    Traceback (most recent call last):
-    TypeError: m_a must be a list
+def matrix_mul(m_a, m_b):
+    """Multiply two matrices and return the resulting matrix."""
+    validate_matrix(m_a, "m_a")
+    validate_matrix(m_b, "m_b")
 
-m_a is not a list of lists:
+    if len(m_a[0]) != len(m_b):
+        raise ValueError("m_a and m_b can't be multiplied")
 
-    >>> matrix_mul([1, 2], [[1, 2]])
-    Traceback (most recent call last):
-    TypeError: m_a must be a list of lists
+    result = []
+    for i in range(len(m_a)):
+        new_row = []
+        for j in range(len(m_b[0])):
+            total = 0
+            for k in range(len(m_b)):
+                total += m_a[i][k] * m_b[k][j]
+            new_row.append(total)
+        result.append(new_row)
 
-m_a is empty:
-
-    >>> matrix_mul([[]], [[1, 2]])
-    Traceback (most recent call last):
-    ValueError: m_a can't be empty
-
-Matrices can't be multiplied due to incompatible dimensions:
-
-    >>> matrix_mul([[1, 2], [3, 4]], [[1, 2, 3], [4, 5, 6], [7, 8, 9]])
-    Traceback (most recent call last):
-    ValueError: m_a and m_b can't be multiplied
+    return result
