@@ -1,45 +1,36 @@
 #!/usr/bin/python3
+"""
+
+This module contains a function that indents texts
+
+"""
 
 
 def text_indentation(text):
-    """Prints two new lines after
-    characters: ., ? and :
+    '''This function prints a text with 2 new lines after each ".", "?", or ":"
+
     Args:
-        text (str): string text
+        text (str): The string to be printed
+
     Raises:
-        TypeError: if `text` is not string
-    """
+        TypeError: If text is not a string
+
+    '''
+
     if not isinstance(text, str):
         raise TypeError("text must be a string")
-    string = ''
-    i = 0
-    while i < len(text):
-        string += text[i]
-        if text[i] in ['.', '?', ':']:
-            string = string.strip()
-            print(string + '\n')
-            try:
-                if text[i + 1] == ' ':
-                    i += 1
-            except IndexError:
-                pass
-            string = ''
-        i += 1
 
-    if len(string) > 0:
-        print(string, end="")
+    count = 0
+    while count < len(text) and text[count] == " ":
+        count = count + 1
 
-
-if __name__ == '__main__':
-    text_indentation("Lorem amet? consectetur adipiscing elit. Quonam: modo")
-    print()
-    text_indentation("text without characters")
-    print()
-    text_indentation("")
-    print()
-    text_indentation("hello.there")
-    print()
-    text_indentation("hello.")
-    print()
-    text_indentation("Holberton. School? How are you: John")
-    print()
+    while count < len(text):
+        print(text[count], end="")
+        if text[count] == "\n" or text[count] in ".?:":
+            if text[count] in ".?:":
+                print("\n")
+            count = count + 1
+            while count < len(text) and text[count] == " ":
+                count = count + 1
+            continue
+        count = count + 1
