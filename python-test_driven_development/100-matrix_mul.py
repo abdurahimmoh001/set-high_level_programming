@@ -1,57 +1,56 @@
 #!/usr/bin/python3
 """
-Defines a matrix multiplication function.
+Moule 100-matrix_mul
+Contain method that does matrix multiplication
+Requires the same size lits/rows of matrix
 """
 
 
 def matrix_mul(m_a, m_b):
-    """Multiplies two matrices."""
-    if not isinstance(m_a, list):
+    """Returns multiplication of matrix"""
+    message1 = "m_a should contain only integers or floats"
+    message2 = "m_b should contain only integers or floats"
+
+    if type(m_a) is not list:
         raise TypeError("m_a must be a list")
-    if not isinstance(m_b, list):
-        raise TypeError("m_b must be a list")
-
-    if not all(isinstance(row, list) for row in m_a):
-        raise TypeError("m_a must be a list of lists")
-    if not all(isinstance(row, list) for row in m_b):
-        raise TypeError("m_b must be a list of lists")
-
-    if m_a == [] or m_a == [[]]:
+    if len(m_a) == 0:
         raise ValueError("m_a can't be empty")
-    if m_b == [] or m_b == [[]]:
-        raise ValueError("m_b can't be empty")
-
-    for row in m_a:
-        for ele in row:
-            if not isinstance(ele, (int, float)):
-                raise TypeError("m_a should contain only integers or floats")
-
-    for row in m_b:
-        for ele in row:
-            if not isinstance(ele, (int, float)):
-                raise TypeError("m_b should contain only integers or floats")
-
-    first_len = len(m_a[0])
-    for row in m_a:
-        if len(row) != first_len:
+    samelen = len(m_a[0])
+    for la_inner in m_a:
+        if type(la_inner) is not list:
+            raise TypeError("m_a must be a list of lists")
+        if len(la_inner) == 0:
+            raise ValueError("m_a can't be empty")
+        if len(la_inner) != samelen:
             raise TypeError("each row of m_a must be of the same size")
-
-    second_len = len(m_b[0])
-    for row in m_b:
-        if len(row) != second_len:
+        for element in la_inner:
+            if type(element) is not int and type(element) is not float:
+                raise TypeError(message1)
+    if type(m_b) is not list:
+        raise TypeError("m_b must be a list")
+    if len(m_b) == 0:
+        raise ValueError("m_b can't be empty")
+    samelen = len(m_b[0])
+    for lb_inner in m_b:
+        if type(lb_inner) is not list:
+            raise TypeError("m_b must be a list of lists")
+        if len(lb_inner) == 0:
+            raise ValueError("m_b can't be empty")
+        if len(lb_inner) != samelen:
             raise TypeError("each row of m_b must be of the same size")
-
+        for element in lb_inner:
+            if type(element) is not int and type(element) is not float:
+                raise TypeError(message2)
     if len(m_a[0]) != len(m_b):
         raise ValueError("m_a and m_b can't be multiplied")
 
-    result = []
-    for i in range(len(m_a)):
-        new_row = []
-        for j in range(len(m_b[0])):
-            sum_val = 0
-            for k in range(len(m_b)):
-                sum_val += m_a[i][k] * m_b[k][j]
-            new_row.append(sum_val)
-        result.append(new_row)
-
-    return result
+    outer_list = []
+    for l_row in range(len(m_a)):
+        inner_list = []
+        for k in range(len(m_b[0])):
+            sum = 0
+            for l_col in range(len(m_b[0])):
+                sum += m_a[l_row][l_col] * m_b[l_col][k]
+            inner_list.append(sum)
+        outer_list.append(inner_list)
+    return outer_list
